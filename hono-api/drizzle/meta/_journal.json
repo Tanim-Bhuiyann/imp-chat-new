@@ -1,0 +1,13 @@
+{
+  "version": "7",
+  "dialect": "sqlite",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "6",
+      "when": 1732463676468,
+      "tag": "0000_redundant_puff_adder",
+      "breakpoints": true
+    }
+  ]
+}
