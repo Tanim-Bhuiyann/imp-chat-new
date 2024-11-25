@@ -8,6 +8,7 @@ import * as bcrypt from 'bcrypt';
 import { serve } from "@hono/node-server";
 
 
+
 const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 const signUpSchema = z.object({
   username: z.string().min(3, 'Username must be at least 3 characters long'),
@@ -20,6 +21,11 @@ const signUpSchema = z.object({
                         'Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character'
                       ),
 })
+
+const signInSchema = z.object({
+  email: z.string().email("Invalid email format"),
+  password: z.string().min(6, 'Password must be at least 8 characters long'),
+});
 
 const app = new Hono()
 .use('*', cors({
@@ -72,6 +78,42 @@ const app = new Hono()
     return c.json({ success: false, message: 'Internal server error' }, 500);
   }
 })
+.post('/sign-in', async (c: Context) => {
+  try{
+    const body = await c.req.json();
+    const data = signInSchema.parse(body);
+
+    const user = await db
+    .select()
+    .from(usersTable)
+    .where(eq(usersTable.email, data.email))
+    .get();
+
+    if(!user){
+      return c.json({
+        success: false,
+        message: 'Email not found'
+      },401)
+    }
+
+    const isPasswordValid = await bcrypt.compare(data.password, user.password);
+    if(!isPasswordValid){
+      return c.json({
+        success: false,
+        message: 'Invalid password'
+      },401);
+    }
+    return c.json({ success: true, message: 'Sign in successful!' }, 200);
+  }catch (error){
+    if (error instanceof z.ZodError) {
+      return c.json({ success: false, errors: error.errors }, 400);
+    }
+    console.error(error);
+    return c.json({ success: false, message: 'Internal server error' }, 500);
+  }
+
+})
+
 
 .get('/tanim', (c) => {
   return c.text('Hello Hono!')

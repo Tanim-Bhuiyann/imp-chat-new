@@ -7,7 +7,6 @@ import { Eye, EyeOff, Loader2 } from "lucide-react";
 import { useMutation } from "@tanstack/react-query";
 import Link from 'next/link'
 import { Button } from "@/components/ui/button";
-import { SignUpForm } from "../sign-up/sign-up";
 import {
   Card,
   CardContent,

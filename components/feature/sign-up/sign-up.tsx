@@ -274,19 +274,24 @@ function SignUp() {
     mutationFn: (values: z.infer<typeof signUpFormSchema>) => postSignUp(values),
     onSuccess: (data) => {
       if (data.success) {
+        // Show success message
         alert(data.message);
       } else {
-        alert("Sign up failed. Please try again.");
+        // Show error message from the response
+        alert(data.message || "Sign up failed. Please try again.");
       }
     },
     onError: (error: Error) => {
-      alert(error.message);
+      // Handle unexpected errors
+      alert(error.message || "An error occurred during sign up. Please try again.");
     },
   });
-
+  
   const onSubmit = (values: SignUpFormValues) => {
+    // Trigger the mutation
     signUpMutation.mutate(values);
   };
+  
 
   return (
     <Card className="w-[400px]">
