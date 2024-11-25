@@ -9,17 +9,18 @@ import { serve } from "@hono/node-server";
 
 
 
-const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+/* const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+.regex(
+  passwordRegex,
+  'Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character'
+) */
 const signUpSchema = z.object({
   username: z.string().min(3, 'Username must be at least 3 characters long'),
   mobileNumber: z.string().regex(/^\d+$/, 'Mobile number must be numeric'),
   email: z.string().email('Invalid email format'),
   password: z.string().min(6, 'Password must be at least 8 characters long')
                       .max(72, 'Password cannot exceed 72 characters') // bcrypt limit
-                      .regex(
-                        passwordRegex,
-                        'Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character'
-                      ),
+                     ,
 })
 
 const signInSchema = z.object({
