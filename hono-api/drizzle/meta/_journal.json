@@ -8,6 +8,13 @@
       "when": 1732463676468,
       "tag": "0000_redundant_puff_adder",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1732734375143,
+      "tag": "0001_worthless_hawkeye",
+      "breakpoints": true
     }
   ]
 }

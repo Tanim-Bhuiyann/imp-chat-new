@@ -2,7 +2,7 @@ import { Hono, type Context } from 'hono';
 import { z } from 'zod';
 import { cors } from "hono/cors";
 import { db } from "./db"
-import { usersTable } from './schema';
+import { usersTable } from './m_schema';
 import { eq, or } from 'drizzle-orm';
 import * as bcrypt from 'bcrypt';
 import { serve } from "@hono/node-server";

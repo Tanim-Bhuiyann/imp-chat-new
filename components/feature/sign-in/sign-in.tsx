@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
 import { useMutation } from "@tanstack/react-query";
-import Link from 'next/link'
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -28,10 +28,10 @@ import { formSchema } from "./schema";
 import { Providers } from "@/providers";
 import { mockSignIn } from "./mock";
 import { useState } from "react";
+import { signInWithGoogle } from "./g-sign-in";
 
 function SignIn() {
   const [showPassword, setShowPassword] = useState(false);
-  
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -91,23 +91,27 @@ function SignIn() {
                 <FormItem>
                   <FormLabel>Password</FormLabel>
                   <FormControl>
-                  <div className="relative">
+                    <div className="relative">
                       <Input
                         type={showPassword ? "text" : "password"}
                         placeholder="Enter your password"
                         {...field}
                       />
-                      <Button 
-                      type="button"
-                      variant="ghost"
-                      size="icon"
-                      className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
-                      onClick={() => setShowPassword(!showPassword)}
-                      aria-label={showPassword ? "Hide password" : "Show password"}
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="icon"
+                        className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                        onClick={() => setShowPassword(!showPassword)}
+                        aria-label={
+                          showPassword ? "Hide password" : "Show password"
+                        }
                       >
-                      {showPassword ? (
-                        <EyeOff className="h-4 w-4"/>) : (<Eye className="h-4 w-4"/>)
-                      }
+                        {showPassword ? (
+                          <EyeOff className="h-4 w-4" />
+                        ) : (
+                          <Eye className="h-4 w-4" />
+                        )}
                       </Button>
                     </div>
                   </FormControl>
@@ -128,6 +132,14 @@ function SignIn() {
               ) : (
                 "Sign In"
               )}
+            </Button>
+            <Button className="w-full"
+              type="button"
+              onClick={async () => {
+                await signInWithGoogle();
+              }}
+            >
+              Sign in with Google
             </Button>
           </form>
         </Form>
