@@ -1,0 +1,73 @@
+
+import NextAuth from "next-auth"
+import Google from "next-auth/providers/google"
+/* import Resend from "next-auth/providers/resend" */
+
+import { db } from "./src/db/schema"
+import { DrizzleAdapter } from "@auth/drizzle-adapter"
+import { accounts, sessions, users, verificationTokens } from "./src/db/schema"
+ 
+/* import { html, text } from './lib/authSendRequest' */
+
+import Credentials from "next-auth/providers/credentials"
+
+
+export const { handlers, auth, signIn, signOut } = NextAuth({
+  adapter: DrizzleAdapter(db, {
+    usersTable: users,
+    accountsTable: accounts,
+    sessionsTable: sessions,
+    verificationTokensTable: verificationTokens,
+  }),
+  providers: [Google ,/*  Resend({
+      apiKey: process.env.AUTH_RESEND_KEY,
+      from: "no-reply@company.com",
+      async sendVerificationRequest({ identifier: email, url, provider: { from } }) {
+        const res = await fetch('https://api.resend.com/emails', {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${process.env.AUTH_RESEND_KEY}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            from,
+            to: email,
+            subject: `Sign in to Your App`,
+            html: html({ url, host: 'bitztech.de' }),
+            text: text({ url, host: 'bitztech.de' }),
+          }),
+        })
+
+        if (!res.ok) throw new Error('Resend error: ' + JSON.stringify(await res.json()))
+      },
+      
+  }) */
+        Credentials({
+          // You can specify which fields should be submitted, by adding keys to the `credentials` object.
+          // e.g. domain, username, password, 2FA token, etc.
+          credentials: {
+            email: {},
+            password: {},
+          },
+          authorize: async (credentials) => {
+            let user = null
+     
+            // logic to salt and hash password
+            const pwHash = saltAndHashPassword(credentials.password)
+     
+            // logic to verify if the user exists
+            user = await getUserFromDb(credentials.email, pwHash)
+     
+            if (!user) {
+              // No user found, so this is their first attempt to login
+              // Optionally, this is also the place you could do a user registration
+              throw new Error("Invalid credentials.")
+            }
+     
+            // return user object with their profile data
+            return user
+          },
+        }),
+
+ ],
+})

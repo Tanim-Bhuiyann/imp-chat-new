@@ -252,7 +252,7 @@ import { Input } from "@/components/ui/input";
 import { signUpFormSchema } from "./schema";
 import Link from "next/link";
 import { useState } from "react";
-import { postSignUp, SignUpFormValues } from "../auth/api/useSignUp";
+import { postSignUp, SignUpFormValues } from "../../auth/api/useSignUp";
 import { Providers } from "@/providers";
 
 function SignUp() {

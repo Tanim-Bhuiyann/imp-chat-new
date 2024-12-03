@@ -4,6 +4,6 @@ import { signIn } from "@/auth";
 
 export async function signInWithGoogle() {
   // Perform server-side logic for Google Sign-In
-  await signIn("google");
+  await signIn("google", { redirectTo: "/s-dasboard" });
 }
 

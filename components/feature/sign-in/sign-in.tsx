@@ -28,7 +28,8 @@ import { formSchema } from "./schema";
 import { Providers } from "@/providers";
 import { mockSignIn } from "./mock";
 import { useState } from "react";
-import { signInWithGoogle } from "./g-sign-in";
+import { signInWithGoogle } from "../../auth/sign-in-google";
+/* import { resendSignIn } from "../auth/sign-in-resend"; */
 
 function SignIn() {
   const [showPassword, setShowPassword] = useState(false);
@@ -133,7 +134,8 @@ function SignIn() {
                 "Sign In"
               )}
             </Button>
-            <Button className="w-full"
+            <Button
+              className="w-full"
               type="button"
               onClick={async () => {
                 await signInWithGoogle();
@@ -141,7 +143,13 @@ function SignIn() {
             >
               Sign in with Google
             </Button>
+
+            {/*  <div> </div> */}
           </form>
+   {/*        <form action={resendSignIn}>
+            <Input type="text" name="email" placeholder="Email" />
+            <Button type="submit">Signin with Resend</Button>
+          </form> */}
         </Form>
       </CardContent>
       <CardFooter className="flex justify-center">
